@@ -21,7 +21,7 @@ Top of `main.py` and `background.py`:
 | `PASSWORD` | Your Wyze account password |
 | `KEY_ID` | https://developer-api-console.wyze.com/#/apikey/view |
 | `API_KEY` | Same page — generate an API key |
-| `DEVICE_MAC` | Run `python lockboltv2.py` against your account and grab the lock's MAC, or pull it from the Wyze app device info. Format: `DX_LB2_<12 hex chars>` |
+| `DEVICE_MAC` | Get the lock's MAC address from the Wyze app under Device Info. Format: `DX_LB2_<12 hex chars>` |
 
 ### 2. OpenHome dashboard — trigger phrases (required)
 
@@ -56,7 +56,7 @@ Top of `background.py`:
 
 Then opt your phone into the sandbox: send `join <two-words>` from your WhatsApp to the sandbox number (the join phrase is shown in the Twilio console).
 
-### 4. WhatsApp passwords — `lockpreferences.json` (optional, edit before re-uploading)
+### 4. WhatsApp passwords — `lockpreferences.json` (optional — only for `background.py`)
 
 `background.py` reads two passwords from `lockpreferences.json` in the ability bundle:
 
@@ -97,7 +97,5 @@ You'll get a confirmation reply (*"Door unlocked."* etc.). Polls every 10s while
 
 ## Limits / things to know
 
-- **Twilio sandbox** expires after 72h of inactivity. Re-send the `join <code>` to renew. Production WhatsApp Business needed for permanent use.
-- **Background daemon only runs during an active OpenHome session.** Texts sent while no session is active will sit in Twilio until the next session, where they're picked up via a 60-second startup grace window or de-duped via SID tracking.
-- **Wyze IoT3 API** uses an undocumented signing scheme. If Wyze changes it, both files break the same way.
-- **Sandbox imports across files don't work in OpenHome**, which is why `WyzeLockClient` and the Wyze credentials are duplicated in `main.py` and `background.py`. Edit both when you change creds.
+- **Twilio sandbox** expires after 72h of inactivity. Re-send the `join <code>` to renew. Production WhatsApp Business needed for sustained use.
+- **Wyze IoT3 API** uses an undocumented signing scheme. If Wyze changes it, both files break the same way. Check https://github.com/SecKatie/ha-wyzeapi for the latest on Wyze API hacking. Code for WyzeLockClient came from an unmerged PR here. 
